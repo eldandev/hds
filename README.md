@@ -1,6 +1,6 @@
 # hds
-'npm install' to install dependencies
+`npm install` to install dependencies
 
-'npm test' to run the tests
+`npm test` to run the tests
 
-'npm start' to run the server
+`npm start` to run the server
