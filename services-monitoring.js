@@ -48,21 +48,21 @@ module.exports = class ServicesMonitoring {
         extractStatus: extractStatusFromJsonResponse
       }),
       new ServiceGateway({
-        name: "bim360-dm",
-        environment: "staging",
-        url: "https://bim360dm-staging.autodesk.com/health?self=true",
+        name:          "bim360-dm",
+        environment:   "staging",
+        url:           "https://bim360dm-staging.autodesk.com/health?self=true",
         extractStatus: extractStatusFromJsonResponse
       }),
       new ServiceGateway({
-        name: "360",
-        environment: "staging",
-        url: "https://360-staging.autodesk.com/health",
+        name:          "360",
+        environment:   "staging",
+        url:           "https://360-staging.autodesk.com/health",
         extractStatus: extractStatusFromXMLResposne
       }),
       new ServiceGateway({
-        name: "eventing",
-        environment: "dev",
-        url: "https://eventing-dev.api.autodesk.com/hds",
+        name:          "eventing",
+        environment:   "dev",
+        url:           "https://eventing-dev.api.autodesk.com/hds",
         extractStatus: extractStatusFromJsonResponse
       }),
     ]
@@ -114,9 +114,7 @@ module.exports = class ServicesMonitoring {
       Object.keys(this.availability[env]).forEach(serviceName => {
         let availabilityArray = this.availability[env][serviceName]
         if (availabilityArray.length == 0) return
-        let minutesAvailable = availabilityArray.reduce((a, b) => a + b)
-        let average = minutesAvailable / availabilityArray.length
-        let percentage = average * 100 + "%"
+        let percentage = this.calculateAvailabilityPercentage(availabilityArray)
         let result = { name: serviceName, environment: env, availability: percentage}
 
         availability.push(result)
@@ -124,5 +122,12 @@ module.exports = class ServicesMonitoring {
     )
 
     return availability
+  }
+
+  calculateAvailabilityPercentage(availabilityArray) {
+    let minutesAvailable = availabilityArray.reduce((a, b) => a + b)
+    let average = minutesAvailable / availabilityArray.length
+
+    return average * 100 + "%"
   }
 }
